@@ -1,0 +1,8 @@
+TEMPERATURE = 300 * kelvin
+PRESSURE = 1 * bar
+
+TIMESTEP = 0.005 # picoseconds
+THERMO_FREQ = int(1/TIMESTEP)
+COORDS_FREQ = int(100/TIMESTEP)
+PRINT_VEL = False
+platform, platform_properties = Platform.getPlatformByName('CUDA'), {'CudaPrecision': 'mixed', 'DeviceIndex': '0'}

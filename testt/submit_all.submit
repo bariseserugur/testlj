@@ -1,0 +1,28 @@
+#!/bin/bash
+#SBATCH --job-name=test
+#SBATCH --nodes=1                # node count
+#SBATCH --ntasks=1               # total number of tasks across all nodes
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=1        # cpu-cores per task (>1 if multi-threaded tasks)
+#SBATCH --mem-per-cpu=4G         # memory per cpu-core (4G is default)
+#SBATCH --time=20:00:00          # total run time limit (HH:MM:SS)
+#SBATCH --array=4,6           # job array with index values 0, 1, 2, 3, 4
+
+module purge
+module load intel/2021.1.2
+module load intel-mpi/intel/2021.3.1
+module load anaconda3/2021.11
+conda activate openmm770
+
+concs=( 'spaced' 'block' 'random' )
+concindex=$(($SLURM_ARRAY_TASK_ID / 3))
+conc=${concs[$concindex]}
+
+simnos=( 1 2 3 )
+simnoindex=$(($SLURM_ARRAY_TASK_ID % 3))
+simno=${simnos[$simnoindex]}
+
+
+cd $conc/$simno
+python ../../multi_polymer.py $conc
+python ../../equilibrate.py 

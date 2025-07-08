@@ -1,0 +1,12 @@
+mass_dict = {'WWW': 18.01528, 'AAA': 44.054, 'BBB': 86.092}
+
+epsilon_matrix = {('AAA', 'AAA'): 1000,('AAA', 'WWW'): 2000,('AAA', 'BBB'): 1000,('WWW', 'WWW'): 1000,('WWW', 'BBB'): 1200,('BBB', 'BBB'): 1400}
+epsilon_matrix = {k: v * kelvin * BOLTZMANN_CONSTANT_kB * AVOGADRO_CONSTANT_NA for k, v in epsilon_matrix.items()}
+
+sigma_matrix = {('AAA', 'AAA'): 0.45,('WWW', 'WWW'): 0.314,('BBB', 'BBB'): 0.5 }
+
+sigma_matrix[('AAA','WWW')] = (sigma_matrix[('AAA','AAA')] + sigma_matrix[('WWW','WWW')])/2
+sigma_matrix[('AAA','BBB')] = (sigma_matrix[('AAA','AAA')] + sigma_matrix[('BBB','BBB')])/2
+sigma_matrix[('BBB','WWW')] = (sigma_matrix[('BBB','BBB')] + sigma_matrix[('WWW','WWW')])/2
+
+cutoff = 2.5 * np.max(list(sigma_matrix.values())) * nanometer
